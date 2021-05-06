@@ -66,6 +66,137 @@ Una funzione è un oggetto `Function` (non si usa il termine istanza e il
 termine classe, è sempre un oggetto). Si può
 pensare a una funzione come una procedura che la script può eseguire.
 
+## Literals
+
+**Arrays**
+
+*   `[]` - un array vuoto
+*   `['mela', 'pera', , 'pinolo']` - un array con 4 elementi.  
+    L'elemento 2 (il terzo) è `undefined`.
+*   `['mela', 'pera', 'pinolo',]` - un array con 3 elementi.  
+    La virgola finale viene ignorata.
+
+**Boolean**
+
+*   `false` - falso
+*   `true` - vero
+
+**Number e BigInt**
+
+*   Un numero se non inizia con `0` è interpretato in base 10.
+*   Se inizia con `0` o `0o` o `0O` è interpretato in base 8.
+*   Se inizia con `0x` o `0X` è interpretato in base 16.
+*   Se inizia con `0b` o `0B` è interpretato in base 2.
+
+Esempi:
+
+```
+0, 117, -345, 123456789123456789             (decimal, base 10)
+015, 0001, -0o77, 0o777777777777             (octal, base 8)
+0x1123, 0x00111, -0xF1A7, 0x123456789ABCDEF  (hexadecimal, "hex" or base 16)
+0b11, 0b0011, -0b11, 0b11101001010101010101  (binary, base 2)
+```
 
 
+**Floating-point**
 
+*Può* comprendere:
+
+*   A decimal integer which can be signed (preceded by "+" or "-"),
+*   Un punto decimale ("."),
+*   A fraction (another decimal number),
+*   An exponent. Cioè "e" o "E" seguito da un intero, which can be signed (preceded by "+" or "-").
+
+*Deve* avere almeno una cifra; *deve* avere un punto decimale oppure una "e" (o "E").
+
+More succinctly, the syntax is:
+
+```
+[(+|-)][digits].[digits][(E|e)[(+|-)]digits]
+```
+
+Esempi:
+
+```
+3.1415926
+-.123456789
+-3.1E+12
+.1e-23
+```
+
+**Objects**
+
+Un *object literal* si rappresenta dentro parentesi graffe (`{}`)
+come una lista di 0 o più coppie chiave-valore.
+
+La chiave, cioè il nome del membro dell'oggetto, può essere un qualsiasi
+literal di stringa o di numero.  
+Se si tratta di un valido identifier
+(cioè inizia per carattere o `_` o `$` e in seguito può avere anche numeri)
+allora può essere scritto senza apici; inoltre può essere acceduto
+anche con la forma `varoggetto.nomemembro`.  
+Altrimenti (se ad esempio si usa un numero come chiave, oppure una stringa
+che inizia con un numero) può essere acceduto solo con la
+forma `varoggetto[<literal>]`.
+
+Il valore può essere qualsiasi dato, anche un altro oggetto.
+
+```js
+var sales = 'Toyota';
+var car = { myCar: 'Saturn', special: sales };
+
+console.log(car.myCar);   // Saturn
+console.log(car.special); // Toyota
+
+var car2 = { manyCars: {a: 'Saab', b: 'Jeep'}, 7: 'Mazda' };
+
+console.log(car2.manyCars.b); // Jeep
+console.log(car2[7]); // Mazda
+
+var unusualPropertyNames = {
+  '': 'An empty string',
+  '!': 'Bang!'
+}
+console.log(unusualPropertyNames.'');   // SyntaxError: Unexpected string
+console.log(unusualPropertyNames['']);  // An empty string
+console.log(unusualPropertyNames.!);    // SyntaxError: Unexpected token !
+console.log(unusualPropertyNames['!']); // Bang!
+```
+
+**Stringhe**
+
+Possono essere racchiuse senza differenze tra apici o virgolette.
+
+Un literal di tipo stringa non è tecnicamente un oggetto String. Ma
+è buona prassi usarli. Dove serve un oggetto String la conversione
+da un literal avviene in automatico e dopo l'uso l'oggetto viene rimosso.
+
+```js
+'foo'
+"bar"
+'1234'
+'one line \n another line'
+"John's cat"
+```
+
+Se si vuole usare un po' di sintassi nelle stringhe si hanno a disposizione i
+*template literal* e anche i *tagged templates*. Si usano con i backtic.
+
+```js
+// Basic literal string creation
+`In JavaScript '\n' is a line-feed.`
+
+// Multiline strings
+`In JavaScript, template strings can run
+ over multiple lines, but double and single
+ quoted strings cannot.`
+
+// String interpolation
+var name = 'Bob', time = 'today';
+`Hello ${name}, how are you ${time}?`
+
+let myTag = (str, name, age) => `${str[0]}${name}${str[1]}${age}${str[2]}`;
+let [name, age] = ['Mika', 28];
+myTag`Participant "${ name }" is ${ age } years old.`;
+// Participant "Mika" is 28 years old.
+```
