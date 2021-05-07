@@ -200,3 +200,110 @@ let [name, age] = ['Mika', 28];
 myTag`Participant "${ name }" is ${ age } years old.`;
 // Participant "Mika" is 28 years old.
 ```
+
+## Control flow
+
+**block statement** - non definisce uno scope per le variabili dichiarate
+con `var`. Solo `let` e `const` dichiarano variabili block-scoped.
+
+```js
+{
+    statement;
+    statement;
+    statement;
+}
+```
+
+**if** - vedi
+[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean#description)
+for an explanation of what evaluates to true and false.
+
+```js
+if (/*boolean expr*/) {
+    dothis();
+} else if () {
+    dothat();
+} else {
+    donothing();
+}
+```
+
+**switch** - Viene valutata l'espressione. Se il valore è fra quelli
+indicati in un `case` il controllo passa allo statement sotto. Altrimenti
+se esiste un `default` il controllo passa allo statement sotto. Altrimenti
+esce dal blocco.  
+Il caso `default` può essere anche messo prima del fondo, ma è prassi metterlo
+in fondo.  
+Se non si incontra un `break` il controllo prosegue. Se si incontra un `break`
+si esce dal blocco.
+
+```js
+switch (expression) {
+  case label_1:
+    statements_1
+    [break;]
+  case label_2:
+    statements_2
+    [break;]
+    …
+  default:
+    statements_def
+    [break;]
+}
+```
+
+**try...throw...cacth...finally** - Qualsiasi tipo di dato può essere
+lanciato con uno statement `throw`; tuttavia esistono questi
+standard types specifically created for this purpose:
+[ECMAScript exceptions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error#error_types),
+[DOMException](https://developer.mozilla.org/en-US/docs/Web/API/DOMException)
+e [DOMError](https://developer.mozilla.org/en-US/docs/Web/API/DOMError).  
+Ci può essere solo un blocco `catch`.
+Il `catchID` esiste come identifier
+solo nel blocco catch.
+
+```js
+openMyFile();
+try {
+  writeMyFile(theData); // This may throw an error
+} catch(catchID) {
+  handleError(catchID); // If an error occurred, handle it
+} finally {
+  closeMyFile(); // Always close the resource
+}
+```
+
+### loops
+
+**for(initial;check;increment) ...** - simile al C.
+
+**do ... while(expr)** - eseguito almeno una volta, condizione valutata
+alla fine.
+
+**while(expr) ...** - condizione valutata
+all'inizio.
+
+**label...break...continue** -
+lo statement `break` fa uscire dal blocco più interno (while, do-while, for, or switch) oppure da quello segnato con una label. Lo statement `continue`
+passa alla prossima iterazione, anche qui con una opzionale label.
+
+**for...in...** - assegna ad una variabile tutte le properties *enumerabili*
+di un oggetto.
+
+**for...of...** - assegna ad una variabile tutti i valori di un
+oggetto che è *iterable*.
+
+Esempio:
+
+```js
+const arr = [3, 5, 7];
+arr.foo = 'hello';
+
+for (let i in arr) {
+   console.log(i); // logs "0", "1", "2", "foo"
+}
+
+for (let i of arr) {
+   console.log(i); // logs 3, 5, 7
+}
+```
