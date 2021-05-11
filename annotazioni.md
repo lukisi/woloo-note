@@ -307,3 +307,91 @@ for (let i of arr) {
    console.log(i); // logs 3, 5, 7
 }
 ```
+
+## Functions
+
+La dichiarazione/definizione di una funzione in Javascript
+in uno `statement`
+è fatta con la sintassi:
+
+*   keyword `function`
+*   nome della funzione
+*   fra parentesi lista di parametri
+*   fra parentesi graffe blocco della funzione.
+
+Esempio:
+
+```js
+function square(number) {
+  return number * number;
+}
+```
+
+Al momento della chiamata di una funzione gli argomenti sono
+passati ai parametri *by value*. I dati di tipo primitivo sono
+copiati, ma gli oggetti/array non sono copiati.
+
+Un altro modo di definire una funzione è in una `expression`
+con questa sintassi:
+
+*   keyword `function`
+*   *opzionale* nome della funzione - La funzione può restare anonima
+    e la variabile che viene valorizzata può essere usata per
+    chiamare la funzione. Comunque, il nome può essere dichiarato
+    sia per permettere la ricorsività sia per avere un identificativo
+    utile durante il debugging.
+*   fra parentesi lista di parametri
+*   fra parentesi graffe blocco della funzione.
+
+Esempio:
+
+```js
+const square = function(number) { return number * number }
+var x = square(4) // x gets the value 16
+
+const factorial = function fac(n) { return n < 2 ? 1 : n * fac(n - 1) }
+console.log(factorial(3))
+```
+
+Definendo una funzione come espressione è possibile definire
+funzioni in base a condizioni, definire funzioni che sono
+membri di ogggetti (*metodi*), ecc.
+
+Esempi:
+
+```js
+var myFunc;
+if (num === 0) {
+  myFunc = function(theObject) {
+    theObject.make = 'Toyota';
+  }
+}
+```
+
+Le funzioni sono visibili in uno *scope* come le variabili (cioè
+l'intero programma o solo dentro un'altra funzione).  
+Le funzioni definiscono un loro *scope* (all'interno dello scope
+globale o quello di un'altra funzione).
+
+Le funzioni definite come statement (ma non quelle definite
+come expression) possono anche
+essere definite dopo il loro uso, purché siano nello stesso scope.
+Si dice *hoisted*.
+
+Una funzione è a tutti gli effetti un oggetto. Si veda l'oggetto
+[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function).
+Tra i suoi metodi c'è `apply` che può essere usato per chiamare una
+funzione in modo flessibile/dinamico.
+
+### closures
+
+Una funzione `outer` definisce uno scope per le variabili dichiarate
+al suo interno. Sicché non sono accessibili dal suo esterno. Abbiamo
+una sorta di *encapsulation*.  
+Ora consideriamo una funzione `inner` definita dentro la funzione `outer`.
+Essa ha accesso alle variabili definite in `outer` (oltre che
+a quelle definite al suo interno e anche alle globali).  
+Ora si consideri
+
+### oggetto arguments
+
