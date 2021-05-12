@@ -1,5 +1,16 @@
 # Annotazioni
 
+### Learn Typescript recipe
+
+*   Learn Javascript: the guide at the Mozilla Web Docs is a good starting point  
+    [link](https://developer.mozilla.org/docs/Web/JavaScript/Guide)
+*   Introduction to TypeScript for JavaScript Programmers (typescriptlang.org docs)  
+    [link](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
+*   Introduction to TypeScript for OOP Programmers (typescriptlang.org docs)  
+    [link](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes-oop.html)
+*   Read the Handbook from start to finish  
+    [link](https://www.typescriptlang.org/docs/handbook/intro.html)
+
 # Javascript
 
 ## Variables
@@ -391,7 +402,52 @@ una sorta di *encapsulation*.
 Ora consideriamo una funzione `inner` definita dentro la funzione `outer`.
 Essa ha accesso alle variabili definite in `outer` (oltre che
 a quelle definite al suo interno e anche alle globali).  
-Ora si consideri
+Se la funzione `inner` è definita come espressione e assegnata
+ad una variabile che sopravvive dopo la conclusione della funzione
+`outer` allora viene creata una *closure*, cioè tutte le variabili
+locali alla funzione `outer` dovranno sussistere anche dopo l'uscita
+della funzione `outer` perché potranno essere utilizzate dalla funzione
+`inner` che può essere chiamata tramite la variabile suddetta.
+
+Faccio un esempio:
+
+```js
+var getNumber;
+var addNumber;
+var initNumber = function() {
+    var theNumber = 0;
+    getNumber = function() {
+        return theNumber;
+    }
+    addNumber = function(inc) {
+        theNumber += inc;
+    }
+}
+initNumber();
+console.log(getNumber());  // logs 0
+addNumber(3);
+console.log(getNumber());  // logs 3
+addNumber(2);
+console.log(getNumber());  // logs 5
+```
+
+La chiamata alla funzione `initNumber` inizializza a 0 `theNumber`
+e valorizza le due funzioni *closures*. Solo per mezzo di queste
+due funzioni `getNumber` e `addNumber` sarà possibile accedere in
+lettura e in modifica a quel valore.
 
 ### oggetto arguments
 
+La funzione che è in esecuzione in un dato momento può accedere
+con la keyword `arguments` ad un oggetto con caratteristiche simili
+ad un array:
+
+*   `arguments[0]` - il primo argomento
+*   `arguments.length` - il numero di argomenti
+
+In questo modo posso passare ad una funzione più argomenti di quelli
+che sono definiti nella firma.
+
+### parameters
+
+**TODO**
