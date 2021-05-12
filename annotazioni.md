@@ -446,8 +446,36 @@ ad un array:
 *   `arguments.length` - il numero di argomenti
 
 In questo modo posso passare ad una funzione più argomenti di quelli
-che sono definiti nella firma.
+che sono i parametri definiti nella firma.
 
 ### parameters
 
-**TODO**
+Tutti i parametri definiti nella firma hanno un valore di default
+che se non specificato è `udefined`. Quindi posso sempre passare
+meno argomenti di quelli
+che sono i parametri definiti nella firma.
+
+Posso indicare nella firma un valore di default diverso per ogni
+parametro, anche se non sono gli ultimi parametri.
+
+Esempio:
+
+```js
+function f(x = 1, y) {
+  return [x, y]
+}
+
+f()   // [1, undefined]
+f(2)  // [2, undefined]
+```
+
+Infine posso indicare come ultimo parametro un "*rest parameters*"
+che conterrà un array con tutti gli argomenti passati in più
+rispetto ai parametri definiti nella firma. La sintassi è:
+
+```js
+function myFun(a,  b, ...manyMoreArgs) {
+    return manyMoreArgs;
+}
+myFun(1,2,3,4,5);   // [ 3, 4, 5 ]
+```
