@@ -479,3 +479,57 @@ function myFun(a,  b, ...manyMoreArgs) {
 }
 myFun(1,2,3,4,5);   // [ 3, 4, 5 ]
 ```
+
+### arrow function
+
+Una funzione può essere definita in modo molto succinto con
+l'operatore freccia così:
+
+```js
+var f1 = s => s.length;
+console.log(f1("ciao")); // 4
+
+var f2 = (a,b) => {console.log(a+b);}
+f2(2,3); // 5
+f2("ciao ", "mondo"); // ciao mondo
+```
+
+Si può notare che se l'unica istruzione del blocco è il valore da restituire
+si può fare a meno delle parentesi graffe. E se c'è un solo parametro da
+passare alla funzione si può fare a meno delle parentesi tonde.
+
+Oltre alla brevità, le arrow function hanno come pecularità che
+non definiscono un loro `this`.
+
+### funzioni predefinite
+
+JavaScript ha diverse funzioni top-level incluse nel framework:
+
+*   eval()
+*   uneval()
+*   isFinite()
+*   isNaN()
+*   parseFloat()
+*   parseInt()
+*   decodeURI()
+*   decodeURIComponent()
+*   encodeURI()
+*   encodeURIComponent()
+
+## Operatori
+
+Uso classico degli operatori binari e unari.
+
+`**` eleva a potenza.
+
+Se si usano gli operatori di comparazione su due operandi che non sono
+dello stesso tipo Javascript cerca di fare un cast, di solito verso
+un tipo *Number*. Se si vuole una stretta comparazione bisogna usare
+`===` e `!==`.
+
+Gli operatori aritmetici *tendono* a considerare i diversi tipi come
+numerici e restituire valori *float*.
+
+
+
+
