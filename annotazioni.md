@@ -524,12 +524,63 @@ Uso classico degli operatori binari e unari.
 
 Se si usano gli operatori di comparazione su due operandi che non sono
 dello stesso tipo Javascript cerca di fare un cast, di solito verso
-un tipo *Number*. Se si vuole una stretta comparazione bisogna usare
-`===` e `!==`.
+un tipo *Number*. Se si vuole una stretta comparazione senza casting
+bisogna usare `===` e `!==`.
 
 Gli operatori aritmetici *tendono* a considerare i diversi tipi come
-numerici e restituire valori *float*.
+numerici e restituire valori *float*. Esempi:
 
+```js
+> "1" / "2"
+0.5
+> "1" / "2" == 1 / 2
+true
+> 1 / 2 == 1.0 / 2.0
+true
+```
 
+Caso particolare il `+`. Come operatore unario davanti a una
+stringa la converte in numero. Come operatore binario dopo una
+stringa converte in stringa l'operando successivo e fa una
+concatenazione. Esempi:
 
+```js
+> +"45"
+45
+> "45"
+'45'
+> "45"-3
+42
+> "45"+2
+'452'
+> +"45"+2
+47
+```
 
+Gli operatori di assegnazione restituiscono un valore, quindi
+si possono avere istruzioni concatenate che vanno interpretate
+da destra verso sinistra, come queste:
+
+```js
+w = z = x = y;
+// equivalent to
+w = (z = (x = y));
+// or
+x = y; z = y; w = y
+```
+
+```js
+z += x *= y;
+// is equivalent to
+z += (x *= y);
+// or (except without the tmp)
+tmp = x * y; x *= y; z += tmp;
+```
+
+### delete
+
+L'operatore `delete` elimina una property da un oggetto.
+
+**TODO** ....
+
+# Typescript
