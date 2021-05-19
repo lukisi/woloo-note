@@ -1,8 +1,8 @@
 # Annotazioni
 
-### Learn Typescript recipe
+### Learn TypeScript recipe
 
-*   Learn Javascript: the guide at the Mozilla Web Docs is a good starting point  
+*   Learn JavaScript: the guide at the Mozilla Web Docs is a good starting point  
     [link](https://developer.mozilla.org/docs/Web/JavaScript/Guide)
 *   Introduction to TypeScript for JavaScript Programmers (typescriptlang.org docs)  
     [link](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
@@ -11,7 +11,7 @@
 *   Read the Handbook from start to finish  
     [link](https://www.typescriptlang.org/docs/handbook/intro.html)
 
-# Javascript
+# JavaScript
 
 ## Variables
 
@@ -583,4 +583,159 @@ L'operatore `delete` elimina una property da un oggetto.
 
 **TODO** ....
 
-# Typescript
+# TypeScript
+
+TypeScript è un linguaggio *transpiled*, cioè il compilatore `tsc` genera
+un altro linguaggio (non codice macchina nativo) che in questo caso è
+JavaScript e quindi viene interpretato.
+
+Un valido codice JavaScript è anche un codice TypeScript (può essere passato
+al comando `tsc`).
+
+Il principale valore aggiunto di TypeScript è il type system. Che viene
+controllato (*checked*) al compile time.
+
+Oltre ai tipi primitivi di JavaScript (che però non sono dichiarati alla
+definizione di una variabile):  
+`boolean`  
+`bigint`  
+`null`  
+`number`  
+`string`  
+`symbol`  
+`undefined`  
+il TypeScript aggiunge:  
+`any` (allow anything)  
+`unknown` (ensure someone using this type declares what the type is)  
+`never` (it’s not possible that this type could happen)  
+`void` (a function which returns undefined or has no return value).
+
+## Variabili
+
+Posso dichiarare il tipo di una variabile così:
+
+```ts
+let name : string = "Carl";
+```
+
+## Funzioni
+
+La firma di una funzione:
+
+```ts
+function getMult(op1 : number, op2 : number): number {
+    ...
+}
+```
+
+## Interfacce
+
+Si può definire una interfaccia per specificare quali siano i tipi dei
+membri (le chiavi) di un oggetto; e poi assegnare un oggetto congruo
+ad una variabile definita per contenere quella interfaccia.
+
+```ts
+interface User {
+  name: string;
+  id: number;
+}
+
+let user: User = {
+  name: "Hayes",
+  id: 0,
+};
+```
+
+## Classi
+
+Si può definire una classe. Se è congrua con una interfaccia
+si può usare con una variabile del tipo della interfaccia.
+
+```ts
+interface User {
+  name: string;
+  id: number;
+}
+
+class UserAccount {
+  name: string;
+  id: number;
+
+  constructor(name: string, id: number) {
+    this.name = name;
+    this.id = id;
+  }
+}
+
+const user: User = new UserAccount("Murphy", 1);
+```
+
+## Tipi composti
+
+### Unioni
+
+La keyword `type` con l'operatore unione `|` permette di creare un
+tipo che, assegnato ad una variabile, elenca i possibili valori che può
+assumere.
+
+```ts
+type MyBool = true | false;
+type WindowStates = "open" | "closed" | "minimized";
+type LockStates = "locked" | "unlocked";
+type OddNumbersUnderTen = 1 | 3 | 5 | 7 | 9;
+```
+
+L'operatore unione `|` può essere usato **anche** per dichiarare una variabile
+che può contenere uno fra diversi tipi.
+
+```ts
+function wrapInArray(obj: string | string[]) {
+  if (typeof obj === "string") {
+    return [obj];
+  } else {
+    return obj;
+  }
+}
+```
+
+### typeof
+
+L'operatore `typeof` (del JavaScript, vedi
+[doc](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof))
+restituisce una stringa in base al tipo di una variabile.  
+*Nota:* con un array l'operatore typeof restituisce "object", per
+vedere se è un array si può usare `Array.isArray(a)`.
+
+### Generics
+
+Un esempio di classe che usa generics è `Array`. Se non si specifica il tipo può
+contenere elementi di qualsiasi (any) valore.
+
+```ts
+type StringArray = Array<string>;
+type NumberArray = Array<number>;
+type ObjectWithNameArray = Array<{ name: string }>;
+```
+
+Possiamo anche noi definire un tipo che fa uso di generics.
+
+```ts
+interface Backpack<Type> {
+  add: (obj: Type) => void;
+  get: () => Type;
+}
+
+// This line is a shortcut to tell TypeScript there is a
+// constant called `backpack`, and to not worry about where it came from.
+declare const backpack: Backpack<string>;
+
+// object is a string, because we declared it above as the variable part of Backpack.
+const object = backpack.get();
+
+// Since the backpack variable is a string, you can't pass a number to the add function.
+backpack.add(23);  // errore dal type checker in compilazione
+```
+
+
+
+
