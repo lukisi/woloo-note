@@ -592,6 +592,41 @@ JavaScript e quindi viene interpretato.
 Un valido codice JavaScript è anche un codice TypeScript (può essere passato
 al comando `tsc`).
 
+## Transpiler
+
+Il comando `tsc nomefile.ts` legge il file TypeScript e genera un file
+`nomefile.js`. Nel fare questa operazione controlla che i tipi definiti
+siano usati correttamente.
+
+Oltre a fare questo controllo per generare il file JavaScript che verrà
+in ultima analisi interpretato ed eseguito da una VM (nodejs ad esempio
+o un browser) il transpiler viene sfruttato dagli IDE per fornire tool
+di aiuto alla programmazione come autocompletion, errori evidenziati, ecc.
+
+Anche se ci sono errori, di norma il transpiler genera comunque il codice
+JavaScript, assumendo che il programmatore sa il fatto suo. A meno che non
+si voglia evitare con il flag `--noEmitOnError`.
+
+Quando si produce il file `.js` tutte le definizioni dei tipi sono
+rimosse. Una definizione di un tipo non modifica il comportamento a
+run-time, ma solo aiuta nel fare i check a compile-time.
+
+Inoltre di solito il transpiler fa anche un *downleveling*: cioè se incontra
+codice che è stato introdotto in JavaScript (o ECMAScript, o ES) in una
+versione recente cerca di produrre codice equivalente che funzioni bene
+anche su una VM compatibile solo con una versione più vecchia.  
+Per default cerca di aderire alla ES3. Si può cambiare se si pensa che
+il runtime sarà di sicuro più recente, e.g. `--target es2015`.
+
+Altri flag interessanti nel file `tsconfig.json`:
+
+*   `noImplicitAny` - errore se il tipo di una variabile non è dichiarato
+    e viene inferred come `any`.
+*   `strictNullChecks` - controlla possibili usi di variabili a `null`
+    o `undefined`.
+
+## static type checking
+
 Il principale valore aggiunto di TypeScript è il type system. Che viene
 controllato (*checked*) al compile time.
 
@@ -734,6 +769,106 @@ const object = backpack.get();
 
 // Since the backpack variable is a string, you can't pass a number to the add function.
 backpack.add(23);  // errore dal type checker in compilazione
+```
+
+## type system strutturale
+
+Abbiamo detto che in fase di compilazione (transpiling in effetti)
+il TypeScript controlla la coerenza dei tipi. Ma non usa un type
+system stretto, bensì uno basato sulla forma degli oggetti.
+
+Un oggetto è considerato assegnabile ad una variabile di un certo tipo
+se possiede tutti i membri di quel tipo.
+
+```ts
+interface Point {
+  x: number;
+  y: number;
+}
+
+function logPoint(p: Point) {
+  console.log(`${p.x}, ${p.y}`);
+}
+
+// logs "12, 26"
+const point = { x: 12, y: 26 };
+logPoint(point);
+
+const point3 = { x: 21, y: 55, z: 89 };
+logPoint(point3); // logs "21, 55"
+
+const rect = { x: 33, y: 3, width: 30, height: 80 };
+logPoint(rect); // logs "33, 3"
+
+const color = { hex: "#187ABF" };
+logPoint(color);
+// Error: Argument of type '{ hex: string; }' is not assignable to parameter of type 'Point'.
+//        Type '{ hex: string; }' is missing the following properties from type 'Point': x, y
+```
+
+# Handbook
+
+## primitivi
+
+I tipi primitivi di JavaScript (che saranno usati come building blocks)
+più frequentemente usati sono `string`, `number` e `boolean`.  
+Il TypeScript usa queste stesse keyword (le stringhe che sarebbero restituite dall'operatore
+`typeof` di JavaScript) per indicare questi tipi.  
+*Nota* con la maiuscola iniziale sono altre cose che raramente useremo nel nostro codice.
+
+## array
+
+Un array che contenga un certo tipo si definisce con `number[]`. Si può usare anche
+`Array<number>` che vedremo meglio con i generics.
+
+*Nota*: Note that `[number]` is a different thing; refer to the section on tuple types.
+
+## any
+
+Una variabile dichiarata come `any` può contenere di tutto. Può avere qualsiasi membro,
+anche esso sarà di tipo `any`. Quindi questo pezzo di codice non produrrà alcun errore
+nel type checking al compile time:
+
+```ts
+let obj: any = { x: 0 };
+// None of the following lines of code will throw compiler errors.
+// Using `any` disables all further type checking, and it is assumed 
+// you know the environment better than TypeScript.
+obj.foo();
+obj();
+obj.bar = 100;
+obj = "hello";
+const n: number = obj;
+```
+
+## funzioni
+
+Si può specificare il tipo dei parametri di una funzione e anche il tipo
+del valore di ritorno, sia per una funzione normale, sia per una funzione
+anonima, sia per una arrow-function.
+
+```ts
+function getMult(op1 : number, op2 : number): number {
+    ...
+}
+```
+
+Nel caso di una funzione anonima, usata in un certo contesto, il transpiler potrebbe
+inferire questi tipi.
+
+```ts
+// No type annotations here, but TypeScript can spot the bug
+const names = ["Alice", "Bob", "Eve"];
+
+// Contextual typing for function
+names.forEach(function (s) {
+  console.log(s.toUppercase());  // <--- emits a error, since it knows that s:string
+});
+
+// Contextual typing also applies to arrow functions
+names.forEach((s) => {
+  console.log(s.toUppercase());  // <--- emits a error, since it knows that s:string
+});
 ```
 
 
