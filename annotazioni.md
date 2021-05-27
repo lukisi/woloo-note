@@ -872,5 +872,38 @@ names.forEach((s) => {
 ```
 
 
+# Angular
 
+Per avere versioni più recenti di nodejs, typescript e npm ho creato un
+conatiner `agata` configurato per usare X11 del mio host, sul quale ho installato
+questi pacchetti con snap.
 
+Installa `node` con snap e questo fornisce anche `npm`.  
+Non installare `typescript` con snap perché non funziona.  
+Non installate `node-typescript` con apt perché poi installerebbe anche `nodejs`.  
+Installa `typescript` con `npm`.
+
+```bash
+luca@dell:~$ lxc launch ubuntu:20.04 --profile default --profile x11 agata
+luca@dell:~$ lxc exec agata -- sudo --user ubuntu --login
+...
+ubuntu@agata:~$ ... sudo apt full-upgrade -y ...
+ubuntu@agata:~$ sudo apt install gnome-terminal
+...
+ubuntu@agata:~$ sudo snap login luca.dionisi@gmail.com
+ubuntu@agata:~$ snap install --classic node
+ubuntu@agata:~$ sudo npm install -g typescript
+ubuntu@agata:~$ snap install --classic code
+ubuntu@agata:~$ 
+ubuntu@agata:~$ npm -v
+6.14.13
+ubuntu@agata:~$ tsc -v
+Version 4.3.2
+ubuntu@agata:~$ node -v
+v14.17.0
+ubuntu@agata:~$ code -v
+1.56.2
+054a9295330880ed74ceaedda236253b4f39a335
+x64
+ubuntu@agata:~$ 
+```
