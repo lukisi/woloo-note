@@ -879,6 +879,7 @@ conatiner `agata` configurato per usare X11 del mio host, sul quale ho installat
 questi pacchetti con snap.
 
 Installa `node` con snap e questo fornisce anche `npm`.  
+Aggiorna `npm` con `sudo npm install -g npm`.  
 Non installare `typescript` con snap perché non funziona.  
 Non installate `node-typescript` con apt perché poi installerebbe anche `nodejs`.  
 Installa `typescript` con `npm`.
@@ -907,3 +908,8 @@ ubuntu@agata:~$ code -v
 x64
 ubuntu@agata:~$ 
 ```
+
+Ora segui il corso Angular di Schwarzmuller. Se non si aggiorna il `npm` come
+detto sopra, l'installazione di `@angular/cli` potrebbe non funzionare.
+
+
